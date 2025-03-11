@@ -208,6 +208,14 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   preparePopupOauth = (): Promise<OauthConfig> => this.inner.initOauth();
 
   /**
+   * Retrieves oauth config
+   *
+   * @returns {Promise<OauthConfig>} the config which must be loaded before
+   * using popup-based OAuth
+   */
+  getOauthConfig = (): Promise<OauthConfig> => this.inner.getOauthConfig();
+
+  /**
    * Authenticate a user with either an email or a passkey and create a session for that user
    *
    * @example
@@ -776,14 +784,12 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       const { orgId, otpId } = existingUser
         ? await this.inner.initEmailAuth({
             email: params.email,
-            emailMode: params.emailMode,
             expirationSeconds,
             redirectParams: params.redirectParams,
           })
         : await this.inner.createAccount({
             type: "email",
             email: params.email,
-            emailMode: params.emailMode,
             expirationSeconds,
             redirectParams: params.redirectParams,
           });
